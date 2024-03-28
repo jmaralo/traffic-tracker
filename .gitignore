@@ -1,0 +1,7 @@
+.vscode
+
+cmd/record/records/*
+cmd/record/record
+
+cmd/visualize/renders/*
+cmd/visualize/visualize
