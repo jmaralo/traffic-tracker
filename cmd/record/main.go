@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 	"os/signal"
@@ -12,7 +13,11 @@ import (
 	"github.com/jmaralo/traffic-tracker/pkg/sniffer"
 )
 
+var promiscFlag = flag.Bool("p", false, "run in promisc mode")
+
 func main() {
+	flag.Parse()
+
 	devices, err := pcap.FindAllDevs()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -32,7 +37,7 @@ func main() {
 		}
 
 		config := sniffer.NewDeviceConfig(device.Name)
-		config.Promisc = true
+		config.Promisc = *promiscFlag
 		configs = append(configs, config)
 	}
 

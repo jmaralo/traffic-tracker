@@ -26,20 +26,22 @@ func Run(configs []sniffer.DeviceConfig, signalChan <-chan os.Signal) error {
 	defer saveFile.Close()
 
 	written := int64(0)
-	defer fmt.Printf("Written a total of %d bytes\n", written)
 	reminderTicker := time.NewTicker(time.Minute)
 	for {
 		select {
 		case record, ok := <-sniffer.Records():
 			if !ok {
+				fmt.Printf("Written a total of %d bytes\n", written)
 				return nil
 			}
 			write, err := saveJSON(record, saveFile)
 			if err != nil {
+				fmt.Printf("Written a total of %d bytes\n", written)
 				return err
 			}
 			written += write
 		case <-signalChan:
+			fmt.Printf("Written a total of %d bytes\n", written)
 			return nil
 		case <-reminderTicker.C:
 			fmt.Printf("Written a total of %d bytes\n", written)
